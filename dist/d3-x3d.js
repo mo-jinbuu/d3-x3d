@@ -8525,7 +8525,7 @@
    */
 
   function dataset1() {
-    var data = {
+    return {
       key: "Fruit",
       values: fruit.map(function (d) {
         return {
@@ -8537,7 +8537,6 @@
         };
       })
     };
-    return data;
   }
   /**
    * Random Dataset - Multi Series
@@ -8546,7 +8545,7 @@
    */
 
   function dataset2() {
-    var data = countries.map(function (d) {
+    return countries.map(function (d) {
       return {
         key: d,
         values: fruit.map(function (d) {
@@ -8560,7 +8559,6 @@
         })
       };
     });
-    return data;
   }
   /**
    * Random Dataset - Single Series Scatter Plot
@@ -8571,7 +8569,7 @@
 
   function dataset3() {
     var points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
-    var data = {
+    return {
       key: "Bubbles",
       values: d3.range(points).map(function (d, i) {
         return {
@@ -8583,7 +8581,39 @@
         };
       })
     };
-    return data;
+  }
+  /**
+   * Convert Bubble/Particle Dataset Format
+   *
+   * @param {Array} data
+   * @returns {Array}
+   */
+
+  function convert(data) {
+    return {
+      key: "Particles",
+      values: data.values.map(function (d) {
+        return {
+          key: d.key,
+          values: [{
+            key: "x",
+            value: d.x
+          }, {
+            key: "y",
+            value: d.y
+          }, {
+            key: "z",
+            value: d.z
+          }, {
+            key: "size",
+            value: randomNum()
+          }, {
+            key: "color",
+            value: randomNum()
+          }]
+        };
+      })
+    };
   }
   /**
    * Random Dataset - Single Series Scatter Plot (with size and color values)
@@ -8594,31 +8624,7 @@
 
   function dataset6() {
     var points = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
-    var data = {
-      key: "Bubbles",
-      values: d3.range(points).map(function (d, i) {
-        return {
-          key: "Point" + i,
-          values: [{
-            key: "size",
-            value: randomNum()
-          }, {
-            key: "color",
-            value: randomNum()
-          }, {
-            key: "x",
-            value: randomNum()
-          }, {
-            key: "y",
-            value: randomNum()
-          }, {
-            key: "z",
-            value: randomNum()
-          }]
-        };
-      })
-    };
-    return data;
+    return convert(dataset3(points));
   }
   /**
    * Random Dataset - Surface Plot 1
@@ -8627,7 +8633,7 @@
    */
 
   function dataset4() {
-    var data = [{
+    return [{
       key: "a",
       values: [{
         key: "1",
@@ -8718,7 +8724,6 @@
         value: 1
       }]
     }];
-    return data;
   }
   /**
    * Random Dataset - Surface Plot 2
@@ -8738,7 +8743,7 @@
     var zRange = d3.range(0, 1.05, 0.1);
     var nx = xRange.length;
     var nz = zRange.length;
-    var data = d3.range(nx).map(function (i) {
+    return d3.range(nx).map(function (i) {
       var values = d3.range(nz).map(function (j) {
         return {
           key: j,
@@ -8750,7 +8755,6 @@
         values: values
       };
     });
-    return data;
   }
 
   var randomData = /*#__PURE__*/Object.freeze({
@@ -8761,6 +8765,7 @@
     dataset1: dataset1,
     dataset2: dataset2,
     dataset3: dataset3,
+    convert: convert,
     dataset6: dataset6,
     dataset4: dataset4,
     dataset5: dataset5
