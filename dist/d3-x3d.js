@@ -3251,8 +3251,6 @@
     var yScale;
     var zScale;
     var colorScale;
-    var sizeScale;
-    var sizeRange = [0.2, 4.0];
     /**
      * Array to String
      *
@@ -3278,7 +3276,7 @@
 
     var init = function init(data) {
       var newData = {};
-      ['x', 'y', 'z', 'size', 'color'].forEach(function (dimension) {
+      ['x', 'y', 'z', 'color'].forEach(function (dimension) {
         var set = {
           key: dimension,
           values: []
@@ -3298,7 +3296,6 @@
       var extentX = newData.x.valueExtent;
       var extentY = newData.y.valueExtent;
       var extentZ = newData.z.valueExtent;
-      var extentSize = newData.size.valueExtent;
       var extentColor = newData.color.valueExtent;
 
       if (typeof xScale === "undefined") {
@@ -3311,10 +3308,6 @@
 
       if (typeof zScale === "undefined") {
         zScale = d3.scaleLinear().domain(extentZ).range([0, dimensions.z]);
-      }
-
-      if (typeof sizeScale === "undefined") {
-        sizeScale = d3.scaleLinear().domain(extentSize).range(sizeRange);
       }
 
       if (color) {
@@ -3340,15 +3333,6 @@
         });
 
         var particleData = function particleData(data) {
-          var pointSizes = function pointSizes(Y) {
-            return Y.values.map(function (d) {
-              var sizeVal = d.values.find(function (v) {
-                return v.key === mappings.size;
-              }).value;
-              return [sizeScale(sizeVal), sizeScale(sizeVal), sizeScale(sizeVal)];
-            });
-          };
-
           var pointCoords = function pointCoords(Y) {
             return Y.values.map(function (d) {
               var xVal = d.values.find(function (v) {
@@ -3374,7 +3358,6 @@
             });
           };
 
-          data.size = array2dToString(pointSizes(data));
           data.point = array2dToString(pointCoords(data));
           data.color = array2dToString(pointColors(data));
           return [data];
@@ -3470,32 +3453,6 @@
       return my;
     };
     /**
-     * Size Scale Getter / Setter
-     *
-     * @param {d3.scale} _v - D3 size scale.
-     * @returns {*}
-     */
-
-
-    my.sizeScale = function (_v) {
-      if (!arguments.length) return sizeScale;
-      sizeScale = _v;
-      return my;
-    };
-    /**
-     * Size Range Getter / Setter
-     *
-     * @param {number[]} _v - Size min and max (e.g. [1, 9]).
-     * @returns {*}
-     */
-
-
-    my.sizeRange = function (_v) {
-      if (!arguments.length) return sizeRange;
-      sizeRange = _v;
-      return my;
-    };
-    /**
      * Color Scale Getter / Setter
      *
      * @param {d3.scale} _v - D3 color scale.
@@ -3537,7 +3494,7 @@
     /**
      * Mappings Getter / Setter
      *
-     * @param {Object} _v - Map properties to size, colour etc.
+     * @param {Object} _v - Map properties to colour etc.
      * @returns {*}
      */
 
@@ -6700,8 +6657,6 @@
     var yScale;
     var zScale;
     var colorScale;
-    var sizeScale;
-    var sizeRange = [0.2, 4.0];
     /* Components */
 
     var viewpoint = component.viewpoint();
@@ -6716,7 +6671,7 @@
 
     var init = function init(data) {
       var newData = {};
-      ['x', 'y', 'z', 'size', 'color'].forEach(function (dimension) {
+      ['x', 'y', 'z', 'color'].forEach(function (dimension) {
         var set = {
           key: dimension,
           values: []
@@ -6736,12 +6691,10 @@
       var extentX = newData.x.valueExtent;
       var extentY = newData.y.valueExtent;
       var extentZ = newData.z.valueExtent;
-      var extentSize = newData.size.valueExtent;
       var extentColor = newData.color.valueExtent;
       xScale = d3.scaleLinear().domain(extentX).range([0, dimensions.x]);
       yScale = d3.scaleLinear().domain(extentY).range([0, dimensions.y]);
       zScale = d3.scaleLinear().domain(extentZ).range([0, dimensions.z]);
-      sizeScale = d3.scaleLinear().domain(extentSize).range(sizeRange);
 
       if (color) {
         colorScale = d3.scaleQuantize().domain(extentColor).range([color, color]);
@@ -6795,7 +6748,7 @@
         axis.xScale(xScale).yScale(yScale).zScale(zScale);
         scene.select(".axis").call(axis); // Add Particles
 
-        particles.xScale(xScale).mappings(mappings).yScale(yScale).zScale(zScale).sizeScale(sizeScale).colorScale(colorScale);
+        particles.xScale(xScale).mappings(mappings).yScale(yScale).zScale(zScale).colorScale(colorScale);
         scene.select(".particles").datum(data).call(particles);
       });
     };
@@ -6878,32 +6831,6 @@
       return my;
     };
     /**
-     * Size Scale Getter / Setter
-     *
-     * @param {d3.scale} _v - D3 color scale.
-     * @returns {*}
-     */
-
-
-    my.sizeScale = function (_v) {
-      if (!arguments.length) return sizeScale;
-      sizeScale = _v;
-      return my;
-    };
-    /**
-     * Size Range Getter / Setter
-     *
-     * @param {number[]} _v - Size min and max (e.g. [1, 9]).
-     * @returns {*}
-     */
-
-
-    my.sizeRange = function (_v) {
-      if (!arguments.length) return sizeRange;
-      sizeRange = _v;
-      return my;
-    };
-    /**
      * Color Scale Getter / Setter
      *
      * @param {d3.scale} _v - D3 color scale.
@@ -6943,35 +6870,9 @@
       return my;
     };
     /**
-     * Size Scale Getter / Setter
-     *
-     * @param {d3.scale} _v - D3 color scale.
-     * @returns {*}
-     */
-
-
-    my.sizeScale = function (_v) {
-      if (!arguments.length) return sizeScale;
-      sizeScale = _v;
-      return my;
-    };
-    /**
-     * Size Range Getter / Setter
-     *
-     * @param {number[]} _v - Size min and max (e.g. [0.5, 3.0]).
-     * @returns {*}
-     */
-
-
-    my.sizeRange = function (_v) {
-      if (!arguments.length) return sizeRange;
-      sizeRange = _v;
-      return my;
-    };
-    /**
      * Mappings Getter / Setter
      *
-     * @param {Object} _v - Map properties to size, colour etc.
+     * @param {Object} _v - Map properties to colour etc.
      * @returns {*}
      */
 
@@ -8591,11 +8492,17 @@
 
   function convert(data) {
     return {
-      key: "Particles",
+      key: data.key,
       values: data.values.map(function (d) {
         return {
           key: d.key,
           values: [{
+            key: "size",
+            value: d.value
+          }, {
+            key: "color",
+            value: d.value
+          }, {
             key: "x",
             value: d.x
           }, {
@@ -8604,12 +8511,6 @@
           }, {
             key: "z",
             value: d.z
-          }, {
-            key: "size",
-            value: randomNum()
-          }, {
-            key: "color",
-            value: randomNum()
           }]
         };
       })
